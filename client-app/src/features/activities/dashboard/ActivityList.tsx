@@ -6,9 +6,18 @@ interface Props {
     activity: Activity[];
     selectActivity: (id: string) => void;
     deleteActivity: (id: string) => void;
+    submitting: boolean;
 }
 
-export default function ActivityList({activity, selectActivity, deleteActivity}: Props): JSX.Element {
+export default function ActivityList({activity, selectActivity, deleteActivity, submitting}: Props): JSX.Element {
+
+    const [target, setTarget] = useStat('activities');
+
+    function handleActivityDelete(e: SyntehicEvent<HTMLButtonElement>, id: string) {
+        setTarget(e.currentTarget.name);
+        deleteActivity(id);
+    }
+
     return (
         <Segment>
             <Item.Group divided>
@@ -23,7 +32,10 @@ export default function ActivityList({activity, selectActivity, deleteActivity}:
                             </Item.Description>
                             <Item.Extra>
                                 <Button onClick={() => selectActivity(activity.id)} floated='right' content='View' color='blue'/>
-                                <Button onClick={() => deleteActivity(activity.id)} floated='right' content='Delete' color='red'/>
+                                <Button
+                                    name={activity.id}
+                                    loading={submitting && target === activity.id}
+                                    onClick={(e) => handleActivityDelete(e, activity.id)} floated='right' content='Delete' color='red'/>
                                 <Label basic content={activity.category}/>
                             </Item.Extra>
                         </ItemContent>
