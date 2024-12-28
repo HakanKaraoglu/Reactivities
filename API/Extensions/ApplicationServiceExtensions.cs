@@ -15,7 +15,8 @@ public static class ApplicationServiceExtensions
 
         services.AddDbContext<DataContext>(opt => { opt.UseSqlite(configuration.GetConnectionString("DefaultConnection")); });
 
-        services.AddCors(options => { options.AddPolicy("CorsPolicy", builder => builder.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000")); });
+        //services.AddCors(options => { options.AddPolicy("CorsPolicy", builder => builder.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000")); });
+        services.AddCors(options => { options.AddPolicy("CorsPolicy", builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin()); });
 
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(List.Handler).Assembly));
         services.AddAutoMapper(typeof(MappingProfiles).Assembly);
